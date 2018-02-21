@@ -6,7 +6,7 @@ There is sample data in the script itself.
 ## How to
 
 ```
-pip install jinja 2
+pip install jinja2
 python3 cisco-cfg.py
 ```
 
