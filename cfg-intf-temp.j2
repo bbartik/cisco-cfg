@@ -1,38 +1,13 @@
-{%- if data.deployment == "single_wan_untagged_lan" -%}
-{%- if data.loop0_ip != "" -%}
+!{% if data.loop_ip != "" %}
 interface Loopback0
  ip address {{ data.loop_ip }} 255.255.255.255
 !{% endif %}
+!{% if (site.dual_router == true or site.dual_wan == false) %}
 interface {{ data.wan_intf }}
  ip address {{ data.wan_ip }} {{ data.wan_mask }}
  no shutdown
-!
-interface {{ data.lan_intf }}
- ip address {{ data.lan_ip }} {{ data.lan_mask }}
- no shutdown
-!
 !{% endif %}
-{%- if data.deployment == "single_wan_tagged_lan" -%}
-{%- if data.loop0_ip != "" -%}
-interface Loopback0
- ip address {{ data.loop_ip }} 255.255.255.255
-!{% endif %}
-interface {{ data.wan_intf }}
- ip address {{ data.wan_ip }} {{ data.wan_mask }}
- no shutdown
-!
-!{% for vlan in data.vlans %}
-interface {{ data.lan_intf }}.{{ vlan.id }}
- description {{ vlan.name }} VLAN
- encapsulation dot1q {{ vlan.id }}
- ip address {{ vlan.ip }} {{ vlan.mask }}
- no shutdown
-!{% endfor %} {% endif %}
-{%- if data.deployment == "dual_wan_single_router_tagged_lan" -%}
-{%- if data.loop0_ip != "" -%}
-interface Loopback0
- ip address {{ data.loop_ip }} 255.255.255.255
-!{% endif %}
+!{% if site.dual_wan == true %}
 interface {{ data.wan1_intf }}
  ip address {{ data.wan1_ip }} {{ data.wan1_mask }}
  no shutdown
@@ -40,7 +15,13 @@ interface {{ data.wan1_intf }}
 interface {{ data.wan2_intf }}
  ip address {{ data.wan2_ip }} {{ data.wan2_mask }}
  no shutdown
-!
+!{% endif %}
+!{% if site.lan_tagged == false %}
+interface {{ data.lan_intf }}
+ ip address {{ data.lan_ip }} {{ data.lan_mask }}
+ no shutdown
+!{% endif %}
+!{% if site.lan_tagged == true %}
 !{% for vlan in data.vlans %}
 interface {{ data.lan_intf }}.{{ vlan.id }}
  description {{ vlan.name }} VLAN

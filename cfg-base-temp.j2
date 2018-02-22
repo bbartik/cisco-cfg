@@ -16,8 +16,8 @@ ip domain-name {{ data.domain_name }}
 !
 username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !
-{%- include "cfg-intf-temp.j2" -%}
-{%- if data.routing[ospf_index] -%} 
+{% include "cfg-intf-temp.j2" %}
+!{% if data.routing[ospf_index] %} 
 {% include "cfg-ospf-temp.j2" %} {% endif %}
 !{% if data.routing[bgp_index] %}
 {% include "cfg-bgp-temp.j2" %} {% endif %}
