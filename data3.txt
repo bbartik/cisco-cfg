@@ -4,11 +4,14 @@
   "local_admin"	 : "cisco",
   "local_password" : "cisco",
   "secret" 	 : "cisco",	
-  "deployment"	 : "single_wan_tagged_lan",
+  "deployment"	 : "dual_wan_single_router_tagged_lan",
   "loop_ip"	 : "10.1.1.1",
-  "wan_intf"	 : "Ethernet1/1",
-  "wan_ip"	 : "100.1.1.1",
-  "wan_mask"	 : "255.255.255.0",
+  "wan1_intf"	 : "Ethernet1/0",
+  "wan1_ip"	 : "100.1.1.1",
+  "wan1_mask"    : "255.255.255.0",
+  "wan2_intf"    : "Ethernet1/1",
+  "wan2_ip"      : "100.1.2.1",
+  "wan2_mask"	 : "255.255.255.0",
   "lan_intf"	 : "Ethernet1/2",
   "vlans"	 : [
     {
@@ -22,13 +25,7 @@
       "name" : "voice",
       "ip"   : "192.168.2.1",
       "mask" : "255.255.255.0"
-    },
-    {
-      "id"   : "3",
-      "name" : "guest",
-      "ip"   : "192.168.3.1",
-      "mask" : "255.255.255.0"
-    } 
+    }
   ],
   "routing"     : [
     {
@@ -42,16 +39,16 @@
         {
           "network" : "192.168.2.0",
           "mask" : "255.255.255.0"
-        },
-        {
-          "network" : "192.168.3.0",
-          "mask" : "255.255.255.0"
         }
       ],
       "neighbors" : [
         {
           "ip" : "100.1.1.2",
           "asn" : "100"
+        },
+        {
+          "ip" : "100.1.2.2",
+          "asn" : "200"
         }
       ]
     }

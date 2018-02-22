@@ -1,4 +1,4 @@
+
 router ospf {{ data.routing[ospf_index].process }} {% for network in data['routing'][ospf_index]['networks']  %}
  network {{ network.network }} {{ network.mask }} area {{ data.routing[ospf_index].area }} {% endfor %}
 !
-
