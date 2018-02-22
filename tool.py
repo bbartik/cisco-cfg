@@ -20,7 +20,6 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath='.'))
 # Populating various variables for later conditions
 
 infile = open(data_file, 'r')
-outfile = open('rtr-config.cfg','w+')
 data = json.load(infile)
 deployment_type = data['deployment']
 cfg_base = env.get_template('cfg-base-temp.j2')
@@ -51,33 +50,13 @@ if bgp_index:
 # These may be unnecessary as logic is built into templates now
 # however dual router sites need two passes
 
-if deployment_type == 'single_wan_untagged_lan':
-  print ('This is for an untagged LAN site')
-  data['type']='single_wan_untagged_lan'
-  for data in data['routers']:  
-    output = cfg_base.render(data=data,site=site,ospf_index=ospf_index,bgp_index=bgp_index)
-    print (output)
-    outfile.write(output)
-elif deployment_type == 'single_wan_tagged_lan':
-  print ('This is for a tagged LAN site with Single WAN circuit')
-  data['type']='single_wan_tagged_lan'
-  for data in data['routers']:
-    output = cfg_base.render(data=data,site=site,ospf_index=ospf_index,bgp_index=bgp_index)
-    print (output)
-    outfile.write(output)
-elif deployment_type == 'dual_wan_single_router_tagged_lan':
-  print ('This is for a tagged LAN site with Dual WAN circuits')
-  data['type']='dual_wan_single_router_tagged_lan'
-  for data in data['routers']:
-    output = cfg_base.render(data=data,site=site,ospf_index=ospf_index,bgp_index=bgp_index)
-    print (output)
-    outfile.write(output)
-elif deployment_type == 'dual_wan_dual_router_untagged_lan':
-  print ('This is for an untagged LAN site with Dual Routers')
-  # data['type']='dual_wan_dual_router_untagged_lan'
-  print (site)
-  for data in data['routers']:
-    output = cfg_base.render(data=data,site=site,ospf_index=ospf_index,bgp_index=bgp_index)
-    print (output)
-    outfile.write(output)
- 
+x = 1
+# data['type']='dual_wan_dual_router_untagged_lan'
+# print (data['deployment_type'])
+for data in data['routers']:
+  outfile = "rtr-config-" + str(x) + ".cfg"
+  outfile = open(outfile,'w+')
+  output = cfg_base.render(data=data,site=site,ospf_index=ospf_index,bgp_index=bgp_index)
+  print (output)
+  outfile.write(output)
+  x = x + x

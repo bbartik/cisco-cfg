@@ -1,6 +1,7 @@
 
 service timestamps debug datetime msec
 service timestamps log datetime msec
+service password-encryption
 !
 hostname {{ data.hostname }}
 !
@@ -13,7 +14,9 @@ aaa authentication login default local
 aaa authorization exec default local
 !
 ip domain-name {{ data.domain_name }}	
-!
+!{% for ns in data.name_server %}
+ip name-server {{ dns }}
+!{% endfor %}
 username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !
 {% include "cfg-intf-temp.j2" %}

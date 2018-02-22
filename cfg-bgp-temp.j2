@@ -1,4 +1,7 @@
-router bgp {{ data.routing[bgp_index].asn }} {% for net in data['routing'][bgp_index]['networks']  %}
+router bgp {{ data.routing[bgp_index].asn }} 
+ bgp log-neighbor-changes {% for net in data['routing'][bgp_index]['networks']  %}
  network {{ net.network }} mask {{ net.mask }} {% endfor %} {% for nbr in data['routing'][bgp_index]['neighbors']  %}
- neighbor {{ nbr.ip }} remote-as {{ nbr.asn }}
+ neighbor {{ nbr.ip }} remote-as {{ nbr.asn }} {% if nbr.ibgp == true %}
+ neighbor {{ nbr.ip }} update-source {{ nbr.source }} 
+ neighbor {{ nbr.ip }} next-hop-self {% endif %} 
 {%- endfor -%}

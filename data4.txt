@@ -34,7 +34,7 @@
             "asn" : "100"
           },
           {
-            "ibgp" : "yes",
+            "ibgp" : true,
             "ip" : "10.1.1.2",
             "asn" : "65000",
             "source" : "loopback0"      
@@ -72,7 +72,7 @@
             "asn" : "200"
           },
           {
-            "ibgp" : "yes",
+            "ibgp" : true,
             "ip" : "10.1.1.1",
             "asn" : "65000",
             "source" : "loopback0"
