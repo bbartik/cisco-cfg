@@ -1,0 +1,136 @@
+{
+    "deployment"   : "dual_wan_dual_router_untagged_lan",
+    "dual_wan"     : false,
+    "dual_router"  : true,
+    "lan_tagged"   : false,
+    "protocols"    : "yes",
+    "routers"      :
+    [{
+      "hostname"     : "EdgeR1",
+      "domain_name"  : "bb.lab",
+      "local_admin"  : "cisco",
+      "local_password" : "cisco",
+      "secret"       : "cisco",
+      "loop_ip"      : "10.1.1.1",
+      "wan_intf"     : "Ethernet1/0",
+      "wan_ip"       : "100.1.1.1",
+      "wan_mask"     : "255.255.255.0",
+      "lan_intf"     : "Ethernet1/2",
+      "lan_ip"       : "192.168.1.1",
+      "lan_mask"     : "255.255.255.0",
+      "routing" : [
+      {
+        "protocol" : "ospf",
+        "process"  : "1",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0",
+            "area" : "0"
+          }
+        ],
+        "redsitribute" : [
+        {
+          "protocol" : "bgp",
+          "process" : "65000",
+          "metric" : "default"
+	}
+	]	
+      },
+      {
+        "protocol" : "bgp",
+        "asn"      : "65000",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0"
+          }
+        ],
+        "neighbors" : [
+          {
+            "ip" : "100.1.1.2",
+            "asn" : "100"
+          },
+          {
+            "ibgp" : true,
+            "ip" : "10.1.1.2",
+            "asn" : "65000",
+            "source" : "loopback0"
+          }
+        ],
+        "redsitribute" : [
+        {
+	  "protocol" : "ospf",
+	  "process" : "1",
+          "metric" : "default"
+	}
+	]
+       }
+       ]
+    },
+    {
+      "hostname"     : "EdgeR2",
+      "domain_name"  : "bb.lab",
+      "local_admin"  : "cisco",
+      "local_password" : "cisco",
+      "secret"       : "cisco",
+      "loop_ip"      : "10.1.1.2",
+      "wan_intf"     : "Ethernet1/0",
+      "wan_ip"       : "100.1.2.1",
+      "wan_mask"     : "255.255.255.0",
+      "lan_intf"     : "Ethernet1/2",
+      "lan_ip"       : "192.168.2.1",
+      "lan_mask"     : "255.255.255.0",
+      "routing"     : [
+      {
+        "protocol" : "ospf",
+        "process"  : "1",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0",
+			"area" : "0"
+          }
+        ],
+        "redsitribute" : [
+		  {
+		     "protocol" : "bgp",
+			 "process" : "65000",
+			 "metric" : "default"
+		  }
+		]	
+      },
+      {
+        "protocol" : "bgp",
+        "asn" : "65000",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0"
+          }
+        ],
+        "neighbors" : [
+          {
+            "ip" : "100.1.2.2",
+            "asn" : "200"
+          },
+          {
+            "ibgp" : true,
+            "ip" : "10.1.1.1",
+            "asn" : "65000",
+            "source" : "loopback0"
+          }
+        ],
+        "redsitribute" : [
+		  {
+		     "protocol" : "ospf",
+			 "process" : "1",
+			 "metric" : "default"
+		  }
+		]
+      }
+      ]
+    }]
+}
+
+
