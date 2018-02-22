@@ -16,12 +16,17 @@ deployment_type = data['deployment']
 # Determine routing protocols from data file and set varaibles
 
 routing_list = data['routing']
-ospf_index = [i for i, s in enumerate(routing_list) if 'ospf' in s]
-bgp_index = [i for i, s in enumerate(routing_list) if 'bgp' in s]
+ospf_index = ([i for i, s in enumerate(routing_list) if s['protocol'] == 'ospf'])
+ospf_index = ospf_index[0]
+ospf = False
 
-if ospf_index:
+bgp_index = ([i for i, s in enumerate(routing_list) if s['protocol'] == 'bgp'])
+bgp_index = bgp_index[0]
+bgp = False
+
+if ospf_index != '':
   ospf = True
-if bgp_index:
+if bgp_index != '':
   bgp = True
 
 # The first pass configure the interface yaml file

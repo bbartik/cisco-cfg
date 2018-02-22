@@ -8,43 +8,33 @@
   "lan_intf"	: "Ethernet1/2",
   "lan_ip"	: "192.168.1.1",
   "lan_mask"	: "255.255.255.0",
-  "routing"	: 
-   [
+  "routing"	: [
     {
-     "ospf" : [
-      {
-       "process" : "1"
-      },
-      {
-       "area" : "0",
-       "stub" : "no",
-       "networks" : [
-         {
-         "network" : "192.168.1.0",
-         "mask" : "0.0.0.255"
-         }
-       ]
-      }
-     ]  
+      "protocol" : "ospf",
+      "process" : "1",
+      "area" : "0",
+      "networks" : [
+        {
+           "network" : "192.168.1.0",
+           "mask" : "0.0.0.255"
+        }
+      ]
     },
     {
-    "bgp" : [
-     {
+      "protocol" : "bgp",
       "asn" : "65000",
       "networks" : [
         {
-        "network" : "192.168.1.0",
-        "mask" : "255.255.255.0"
+          "network" : "192.168.1.0",
+          "mask" : "255.255.255.0"
         }
       ],
       "neighbors" : [
         {
-        "neighbor" : "100.1.1.2",
-        "remote_asn" : "100"
+          "neighbor" : "100.1.1.2",
+          "remote_asn" : "100"
         }
       ]
     }
-   ]
-   }
-  ]	
-} 
+  ]
+}

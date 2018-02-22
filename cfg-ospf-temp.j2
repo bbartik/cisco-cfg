@@ -1,6 +1,6 @@
 
 router ospf {{ data.routing[ospf_index].process }}
-!{% for network in data.routing.ospf.network %}
+!{% for network in data.routing.[ospf_index].ospf.networks %}
  network {{ network.network }} {{ network.mask }} area 0
 !{% endfor %}
 
