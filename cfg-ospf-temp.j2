@@ -1,4 +1,5 @@
 
-router ospf {{ data.routing[ospf_index].process }} {% for network in data['routing'][ospf_index]['networks']  %}
+router ospf {{ data.routing[ospf_index].process }} 
+ log-adjacency-changes {% for network in data['routing'][ospf_index]['networks']  %}
  network {{ network.network }} {{ network.mask }} area {{ network.area }} {% endfor %}
 !

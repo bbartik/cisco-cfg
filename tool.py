@@ -31,15 +31,12 @@ site = { key:value for key,value in data.items() if key in site_crit }
 router_list = data['routers']
 for router in router_list:
   routing_list = router['routing']
-  
-print (routing_list)
 
 ospf = False
 ospf_index = ([i for i, s in enumerate(routing_list) if s['protocol'] == 'ospf'])
 if ospf_index:
   ospf_index = ospf_index[0]
   ospf = True
-  print (ospf_index)
 
 bgp = False
 bgp_index = ([i for i, s in enumerate(routing_list) if s['protocol'] == 'bgp'])

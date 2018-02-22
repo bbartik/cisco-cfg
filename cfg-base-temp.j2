@@ -1,10 +1,22 @@
 
-service timestamps debug datetime msec
-service timestamps log datetime msec
 service password-encryption
+service tcp-keepalives-in
+service tcp-keepalives-out
+service timestamps debug datetime msec localtime show-timezone
+service timestamps log datetime msec localtime show-timezone
+service sequence-numbers
+no service tcp-small-servers
+no service udp-small-servers
+!
+no ip source-route
+ip routing
+ip cef
+ip tcp synwait-time 10
 !
 hostname {{ data.hostname }}
 !
+logging buffered 500000
+no logging console
 enable secret {{ data.secret }}
 !
 aaa new-model
@@ -14,9 +26,9 @@ aaa authentication login default local
 aaa authorization exec default local
 !
 ip domain-name {{ data.domain_name }}	
-!{% for ns in data.name_server %}
-ip name-server {{ dns }}
-!{% endfor %}
+!{% for ns in data.name_servers %}
+ip name-server {{ ns.ip }} {% endfor %}
+!
 username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !
 {% include "cfg-intf-temp.j2" %}
@@ -25,10 +37,59 @@ username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !{% if data.routing[bgp_index] %}
 {% include "cfg-bgp-temp.j2" %} {% endif %}
 !
+logging source-interface loopback0 {% for log in data.log_servers %}
+logging {{ log.ip }} {% endfor %}
+!
+ntp source loopback0 {% for ntp in data.ntp_servers %}
+ntp server {{ ntp.name }} {% endfor %}
+!
+!
+ip ftp source-interface loopback0
+ip tftp source-interface loopback0
+ip ssh source-interface loopback0
+snmp-server trap-source loopback0
+ip tacacs source-interface loopback0
+ip radius source-interface loopback0
+!
+!
+ip ssh authentication-retries 3
+ip ssh version 2
+crypto key generate rsa general-keys modulus 1024
+no ip http server
+no ip http secure-server
+!
+!
+ip access-list standard REMOTE_ACCESS
+ permit {{ data.mgmt_net }} {{ data.mgmt_mask }}
+ deny any log
+ip access-list standard SNMP_RO_IN {% for poller in data.snmp.pollers %}
+ permit {{ poller.ip }} 0.0.0.0 {% endfor %}
+ deny any log
+ip access-list standard SNMP_RW_IN {% for poller in data.snmp.pollers %}
+ permit {{ poller.ip }} 0.0.0.0 {% endfor %}
+ deny any log
+!
+snmp-server community {{ data.snmp.read }} ro SNMP_RO_IN
+snmp-server community {{ data.snmp.write }} rw SNMP_RW_IN
+snmp-server ifindex persist
+snmp-server location {{ data.snmp.location }}
+snmp-server contact {{ data.snmp.contact }}
+snmp-server chassis-id {{ data.hostname }}
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps tty
+snmp-server enable traps envmon fan shutdown supply temperature status
+snmp-server enable traps config
+snmp-server enable traps entity {% for trapper in data.snmp.trap_server %}
+snmp-server host {{ trapper.ip }} {{ trapper.string }} {% endfor %}
 !
 line con 0
  logging synchronous
+ exec-timeout 10
+ transport preferred none
 line vty 0 15
+ access-class REMOTE_ACCESS in
  transport input ssh
  logging synchronous
+ exec-timeout 10
+ transport preferred none
 !

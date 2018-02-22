@@ -1,0 +1,117 @@
+{
+    "deployment"   : "dual_wan_dual_router_untagged_lan",
+    "dual_wan"     : true,
+    "dual_router"  : false,
+    "lan_tagged"   : false,
+    "protocols"    : "yes",
+    "routers"      :
+    [{
+      "hostname"     : "EdgeR1",
+      "domain_name"  : "bb.lab",
+      "local_admin"  : "cisco",
+      "local_password" : "cisco",
+      "secret"       : "cisco",
+      "snmp" : {
+        "location" : "Portland, OR",
+        "contact" : " Bryan",
+        "read" : "priv4teStriNg",
+        "write" : "publ1cStrinG",
+        "trap_servers" : [
+        {
+          "ip" : "10.1.99.80",
+          "string" : "tr@psCity"
+        },
+        {
+          "ip" : "10.1.99.81",
+          "string" : "tr@psCity"
+        }],
+        "pollers" : [
+        {
+          "ip" : "10.1.99.80"
+        },
+        {
+          "ip" : "10.1.99.81"
+        }]
+        },
+      "name_servers"  : [
+      {
+        "ip" : "8.8.8.8"
+      },
+      {
+        "ip" : "8.8.4.4"
+      }      
+      ],
+      "ntp_servers"  : [
+      {
+        "name" : "100.1.1.2"
+      },
+      {
+        "name" : "100.2.2.2"
+      }
+      ],
+      "log_servers"  : [
+      {
+        "ip" : "10.1.1.50"
+      }
+      ],
+      "mgmt_net"     : "10.1.99.0",
+      "mgmt_mask"    : "0.0.0.255",
+      "loop_ip"      : "10.1.1.1",
+      "wan1_intf"     : "Ethernet1/0",
+      "wan1_ip"       : "100.1.1.1",
+      "wan1_mask"     : "255.255.255.252",
+      "wan2_intf"     : "Ethernet1/0",
+      "wan2_ip"       : "100.2.2.1",
+      "wan2_mask"     : "255.255.255.252",
+      "lan_intf"     : "Ethernet1/2",
+      "lan_ip"       : "192.168.1.1",
+      "lan_mask"     : "255.255.255.0",
+      "routing" : [
+      {
+        "protocol" : "ospf",
+        "process"  : "1",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0",
+            "area" : "0"
+          }
+        ],
+        "redsitribute" : [
+        {
+          "protocol" : "bgp",
+          "process" : "65000",
+          "metric" : "default"
+	}
+	]	
+      },
+      {
+        "protocol" : "bgp",
+        "asn"      : "65000",
+        "networks" : [
+          {
+            "network" : "192.168.1.0",
+            "mask" : "255.255.255.0"
+          }
+        ],
+        "neighbors" : [
+          {
+            "ip" : "100.1.1.2",
+            "asn" : "100"
+          },
+          {
+            "ip" : "100.2.2.2",
+            "asn" : "200"
+          }
+        ],
+        "redsitribute" : [
+        {
+	  "protocol" : "ospf",
+	  "process" : "1",
+          "metric" : "default"
+	}
+	]
+       }
+       ]
+    }]
+}

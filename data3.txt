@@ -11,6 +11,22 @@
       "local_admin"  : "cisco",
       "local_password" : "cisco",
       "secret"       : "cisco",
+      "name_servers"  : [
+      {
+        "ip" : "8.8.8.8"
+      },
+      {
+        "ip" : "8.8.4.4"
+      }
+      ],
+      "ntp_servers"  : [
+      {
+        "name" : "100.1.1.1"
+      },
+      {
+        "name" : "100.1.1.1"
+      }
+      ],
       "loop_ip"      : "10.1.1.1",
       "wan_intf"     : "Ethernet1/0",
       "wan_ip"       : "100.1.1.1",
