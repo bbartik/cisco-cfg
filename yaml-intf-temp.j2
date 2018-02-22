@@ -1,0 +1,21 @@
+---
+{% if data.type == "single_wan_untagged_lan" %}
+- deployment_type : single_wan_untagged_lan
+  template : single_wan_untagged_lan
+  router_config: 
+    - interfaces :
+      - { interface: loopback0, intf_ip: {{ data.loop_ip }}, intf_mask: 255.255.255.255 }
+      - { interface: {{ data.wan_intf }} , intf_ip: {{ data.wan_ip }}, intf_mask: {{ data.wan_mask }} }
+      - { interface: {{ data.lan_intf }}, intf_ip: {{ data.lan_ip }}, intf_mask: {{ data.lan_mask}} }
+{% endif %} {% if data.type == "single_wan_tagged_lan" %}
+- deployment_type : single_wan_tagged_lan
+  template: single_wan_tagged_lan
+  router config:
+    - vlans: {% for vlan in data.vlans %}
+      - { name : {{ vlan.name }}, vlan : {{ vlan.id }} } {% endfor %}
+    - interfaces :
+      - { interface: loopback0, intf_ip: {{ data.loop_ip }}, intf_mask: 255.255.255.255 }
+      - { interface: {{ data.wan_intf }} , intf_ip: {{ data.wan_ip }}, intf_mask: {{ data.wan_mask }} } {% for vlan in data.vlans %}
+      - { interface: {{ data.lan_intf }}.{{ vlan.id }}, intf_ip: {{ vlan.ip }}, intf_mask: {{ vlan.mask}} } {% endfor %}
+{% endif %}
+
