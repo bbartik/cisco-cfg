@@ -42,11 +42,14 @@
             "area" : "0"
           }
         ],
-        "redsitribute" : [
-        {
+        "redistribute" : [
+        { 
+          "self" : "ospf",
           "protocol" : "bgp",
           "process" : "65000",
-          "metric" : "default"
+          "metric" : "default",
+          "route_map" : "BGP-TO-OSPF",
+          "routes" : "all"
 	}
 	]	
       },
@@ -71,11 +74,14 @@
             "source" : "loopback0"
           }
         ],
-        "redsitribute" : [
+        "redistribute" : [
         {
+          "self" : "bgp",
 	  "protocol" : "ospf",
 	  "process" : "1",
-          "metric" : "default"
+          "metric" : "default",
+          "route_map" : "OSPF-TO-BGP",
+          "routes" : "all"
 	}
 	]
        }
@@ -118,13 +124,16 @@
 			"area" : "0"
           }
         ],
-        "redsitribute" : [
-		  {
-		     "protocol" : "bgp",
-			 "process" : "65000",
-			 "metric" : "default"
-		  }
-		]	
+        "redistribute" : [
+        {
+          "self" : "ospf",
+          "protocol" : "bgp",
+          "process" : "65000",
+          "metric" : "default",
+          "route_map" : "BGP-TO-OSPF",
+          "routes" : "all"
+        }
+        ]	
       },
       {
         "protocol" : "bgp",
@@ -147,13 +156,16 @@
             "source" : "loopback0"
           }
         ],
-        "redsitribute" : [
-		  {
-		     "protocol" : "ospf",
-			 "process" : "1",
-			 "metric" : "default"
-		  }
-		]
+        "redistribute" : [
+        {
+          "self" : "bgp",
+          "protocol" : "ospf",
+          "process" : "1",
+          "metric" : "default",
+          "route_map" : "OSPF-TO-BGP",
+          "routes" : "all"
+        }
+	]
       }
       ]
     }]
