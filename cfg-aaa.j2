@@ -1,0 +1,8 @@
+{% if data.auth.type == "local" %}
+aaa new-model
+aaa authentication login default local
+aaa authorization exec default local
+{% if data.auth.aaa_server.type == "radius" %}
+{% endif %}
+
+

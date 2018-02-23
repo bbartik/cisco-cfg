@@ -1,0 +1,24 @@
+!{% if data.snmp %}
+ip access-list standard REMOTE_ACCESS
+ permit {{ data.mgmt_net }} {{ data.mgmt_mask }}
+ deny any log
+ip access-list standard SNMP_RO_IN {% for poller in data.snmp.pollers %}
+ permit {{ poller.ip }} 0.0.0.0 {% endfor %}
+ deny any log
+ip access-list standard SNMP_RW_IN {% for poller in data.snmp.pollers %}
+ permit {{ poller.ip }} 0.0.0.0 {% endfor %}
+ deny any log
+!
+snmp-server community {{ data.snmp.read }} ro SNMP_RO_IN
+snmp-server community {{ data.snmp.write }} rw SNMP_RW_IN
+snmp-server ifindex persist
+snmp-server location {{ data.snmp.location }}
+snmp-server contact {{ data.snmp.contact }}
+snmp-server chassis-id {{ data.hostname }}
+snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
+snmp-server enable traps tty
+snmp-server enable traps envmon fan shutdown supply temperature status
+snmp-server enable traps config
+snmp-server enable traps entity {% for trap in data.snmp.trap_servers %}
+snmp-server host {{ trap.ip }} {{ trap.string }} {% endfor %}
+!{% endif %}

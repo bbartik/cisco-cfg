@@ -31,13 +31,13 @@ ip name-server {{ ns.ip }} {% endfor %}
 !
 username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !
-{% include "cfg-intf-temp.j2" %}
+{% include "cfg-intf.j2" %}
 !{% if data.routing[ospf_index] %} 
-{% include "cfg-ospf-temp.j2" %} {% endif %}
+{% include "cfg-ospf.j2" %} {% endif %}
 !{% if data.routing[bgp_index] %}
-{% include "cfg-bgp-temp.j2" %} {% endif %}
+{% include "cfg-bgp.j2" %} {% endif %}
 !
-{% include "cfg-maps-temp.j2" %}
+{% include "cfg-maps.j2" %}
 !
 !
 logging source-interface loopback0 {% for log in data.log_servers %}
@@ -61,29 +61,7 @@ crypto key generate rsa general-keys modulus 1024
 no ip http server
 no ip http secure-server
 !
-!
-ip access-list standard REMOTE_ACCESS
- permit {{ data.mgmt_net }} {{ data.mgmt_mask }}
- deny any log
-ip access-list standard SNMP_RO_IN {% for poller in data.snmp.pollers %}
- permit {{ poller.ip }} 0.0.0.0 {% endfor %}
- deny any log
-ip access-list standard SNMP_RW_IN {% for poller in data.snmp.pollers %}
- permit {{ poller.ip }} 0.0.0.0 {% endfor %}
- deny any log
-!
-snmp-server community {{ data.snmp.read }} ro SNMP_RO_IN
-snmp-server community {{ data.snmp.write }} rw SNMP_RW_IN
-snmp-server ifindex persist
-snmp-server location {{ data.snmp.location }}
-snmp-server contact {{ data.snmp.contact }}
-snmp-server chassis-id {{ data.hostname }}
-snmp-server enable traps snmp authentication linkdown linkup coldstart warmstart
-snmp-server enable traps tty
-snmp-server enable traps envmon fan shutdown supply temperature status
-snmp-server enable traps config
-snmp-server enable traps entity {% for trapper in data.snmp.trap_server %}
-snmp-server host {{ trapper.ip }} {{ trapper.string }} {% endfor %}
+{% include "cfg-snmp.j2" %}
 !
 line con 0
  logging synchronous

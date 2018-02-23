@@ -22,7 +22,7 @@ env = jinja2.Environment(loader=jinja2.FileSystemLoader(searchpath='.'))
 infile = open(data_file, 'r')
 data = json.load(infile)
 deployment_type = data['deployment']
-cfg_base = env.get_template('cfg-base-temp.j2')
+cfg_base = env.get_template('cfg-base.j2')
 site_crit = {'deployment_type','dual_wan','dual_router','lan_tagged'}
 site = { key:value for key,value in data.items() if key in site_crit }
 
