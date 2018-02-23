@@ -1,5 +1,5 @@
 {
-    "deployment"   : "dual_wan_dual_router_untagged_lan",
+    "deployment"   : "dual_wan_untagged_lan",
     "dual_wan"     : true,
     "dual_router"  : false,
     "lan_tagged"   : false,
@@ -77,11 +77,14 @@
             "area" : "0"
           }
         ],
-        "redsitribute" : [
+        "redistribute" : [
         {
+          "self" : "ospf",
           "protocol" : "bgp",
           "process" : "65000",
-          "metric" : "default"
+          "metric" : "default",
+          "route_map" : "BGP-TO-OSPF",
+          "routes" : "all"
 	}
 	]	
       },
@@ -104,11 +107,14 @@
             "asn" : "200"
           }
         ],
-        "redsitribute" : [
+        "redistribute" : [
         {
-	  "protocol" : "ospf",
+	  "self" : "bgp",
+          "protocol" : "ospf",
 	  "process" : "1",
-          "metric" : "default"
+          "metric" : "default",
+          "route_map" : "OSPF-TO-BGP",
+          "routes" : "all"
 	}
 	]
        }

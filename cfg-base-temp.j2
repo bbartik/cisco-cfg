@@ -37,6 +37,9 @@ username {{ data.local_admin }} privilege 15 {{ data.local_password }}
 !{% if data.routing[bgp_index] %}
 {% include "cfg-bgp-temp.j2" %} {% endif %}
 !
+{% include "cfg-maps-temp.j2" %}
+!
+!
 logging source-interface loopback0 {% for log in data.log_servers %}
 logging {{ log.ip }} {% endfor %}
 !

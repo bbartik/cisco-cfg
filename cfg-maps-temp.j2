@@ -1,0 +1,7 @@
+!{% for proto in data['routing'][bgp_index]['redistribute'] %}
+!{% if proto.routes == "all" and proto.self == "bgp" %}
+route-map OSPF-TO-BGP permit 10 {% endif %} {% endfor %}
+!{% for proto in data['routing'][ospf_index]['redistribute'] %}
+!{% if proto.routes == "all" and proto.self == "ospf" %}
+route-map BGP-TO-OSPF permit 10 {% endif %} {% endfor %}
+

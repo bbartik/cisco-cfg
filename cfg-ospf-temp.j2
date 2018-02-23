@@ -2,4 +2,6 @@
 router ospf {{ data.routing[ospf_index].process }} 
  log-adjacency-changes {% for network in data['routing'][ospf_index]['networks']  %}
  network {{ network.network }} {{ network.mask }} area {{ network.area }} {% endfor %}
+{% for proto in data['routing'][ospf_index]['redistribute'] %} redistribute {{ proto.protocol }} {{ proto.process }} route-map {{ proto.route_map }} subnets
+!{% endfor %}
 !
